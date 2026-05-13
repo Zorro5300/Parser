@@ -30,9 +30,10 @@ class LexicalAnalyzer:
         'COMMA': 7,                # Запятая ,
         'KEYWORD_REAL': 8,         # Тип данных real
         'KEYWORD_INTEGER': 9,      # Тип данных integer
-        'ASSIGN': 10,              # Оператор присваивания :=
-        'WHITESPACE': 11,          # Разделитель (пробел)
-        'NEWLINE': 12,             # Разделитель (новая строка)
+        'KEYWORD_STRING': 10,
+        'ASSIGN': 11,              # Оператор присваивания :=
+        'WHITESPACE': 12,          # Разделитель (пробел)
+        'NEWLINE': 13,             # Разделитель (новая строка)
         'ERROR': 99                # Ошибка
     }
     
@@ -141,6 +142,9 @@ class LexicalAnalyzer:
                     elif lexeme == 'integer':
                         token_code = self.TOKEN_CODES['KEYWORD_INTEGER']
                         token_type = 'тип данных (integer)'
+                    elif lexeme == 'string':
+                        token_code = self.TOKEN_CODES['KEYWORD_STRING']
+                        token_type = 'тип данных (string)'
                     else:
                         token_code = self.TOKEN_CODES['IDENTIFIER']
                         token_type = 'идентификатор'

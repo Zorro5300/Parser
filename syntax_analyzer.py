@@ -233,7 +233,7 @@ class SyntaxAnalyzer:
         """
         FIELD_DEF → ID_LIST ":" TYPE_NAME
         ID_LIST → ID ( "," ID )*
-        TYPE_NAME → "real" | "integer"
+        TYPE_NAME → "real" | "integer" | "string"
         """
         # Разбор списка идентификаторов
         saved_pos = self.pos
@@ -302,7 +302,7 @@ class SyntaxAnalyzer:
             self._add_error("", line, pos, f"Ожидался тип данных (real/integer) для поля {identifiers[0]}")
             return False
         
-        if token.lexeme in ('real', 'integer'):
+        if token.lexeme in ('real', 'integer', 'string'):
             self._next()
         else:
             self._add_error(
