@@ -227,7 +227,6 @@ project/
             
             "✅ Корректный пример (одно поле)": 
                 "type point = record\n    x,y,z: real;\nend;",
-
         }
         
         self.init_ui()
@@ -748,13 +747,44 @@ project/
                 self.token_table.setItem(i, 2, lexeme_item)
                 self.token_table.setItem(i, 3, location_item)
             
+            # ---------- ИЗМЕНЕНИЯ НАЧИНАЮТСЯ ЗДЕСЬ ----------
+            # Если есть лексические ошибки — НЕ ЗАПУСКАЕМ СИНТАКСИЧЕСКИЙ АНАЛИЗ
             if lexical_errors:
                 self.output_area.append(f"Лексических ошибок: {len(lexical_errors)}")
                 for err in lexical_errors:
-                    self.output_area.append(f"  • {err['message']} (строка {err['line']}, позиция {err['position']})")
-            else:
-                self.output_area.append("Лексический анализ завершен без ошибок")
-                self.output_area.append(f"Выделено значащих лексем: {len(significant_tokens)}")
+                    self.output_area.append(
+                        f"  • {err['message']} (строка {err['line']}, позиция {err['position']})"
+                    )
+                self.output_area.append("\n⚠️ СИНТАКСИЧЕСКИЙ АНАЛИЗ ОТМЕНЁН из-за лексических ошибок.")
+                
+                # Отображаем лексические ошибки в таблице ошибок
+                self.error_table.setRowCount(len(lexical_errors))
+                for i, err in enumerate(lexical_errors):
+                    fragment_item = QTableWidgetItem(err['char'])
+                    location_item = QTableWidgetItem(f"строка {err['line']}, позиция {err['position']}")
+                    description_item = QTableWidgetItem(err['message'])
+                    
+                    error_color = QColor(255, 200, 200)
+                    for item in (fragment_item, location_item, description_item):
+                        item.setBackground(QBrush(error_color))
+                        item.setForeground(QBrush(QColor(0, 0, 0)))
+                        font = QFont()
+                        font.setBold(True)
+                        item.setFont(font)
+                        item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                    
+                    self.error_table.setItem(i, 0, fragment_item)
+                    self.error_table.setItem(i, 1, location_item)
+                    self.error_table.setItem(i, 2, description_item)
+                
+                self.statusbar.showMessage(f"Лексический анализ завершён с {len(lexical_errors)} ошибками. Синтаксический анализ не выполнялся.")
+                self.tab_widget.setCurrentIndex(1)   # переключаемся на вкладку "Ошибки"
+                return   # ВАЖНО: выходим, синтаксический анализ не запускаем
+            
+            # Если лексических ошибок нет — продолжаем
+            self.output_area.append("Лексический анализ завершен без ошибок")
+            self.output_area.append(f"Выделено значащих лексем: {len(significant_tokens)}")
+            # ---------- ИЗМЕНЕНИЯ ЗАКАНЧИВАЮТСЯ ЗДЕСЬ ----------
             
             # Синтаксический анализ
             self.output_area.append("\n" + "-"*60)
