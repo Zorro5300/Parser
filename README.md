@@ -4,7 +4,7 @@
 Изучить назначение и принципы работы синтаксического анализатора в структуре компилятора. Спроектировать грамматику, построить соответствующую схему метода анализа грамматики и выполнить программную реализацию парсера с нейтрализацией синтаксических ошибок методом Айронса. Интегрировать разработанный модуль в ранее созданный графический интерфейс языкового процессора.
 
 ## Сведения об авторе
-- **ФИО**: kokunov Andrey 
+- **ФИО**: Зоркольцев Илья
 - **Группа**: АВТ 313
 - **Дата**: 2026 год
 
@@ -12,37 +12,29 @@
 Разработать синтаксический анализатор (парсер) в соответствии с индивидуальным вариантом курсовой (расчетно-графической) работы, интегрировать его в приложение из лабораторной работы №1 и обеспечить наглядный вывод результатов анализа.
 
 ## Вариант задания: 
-5. Объявление комплексного числа с инициализацией на языке Rust
-let complex_num2 = num::complex::Complex::new(3.1, -4.2);
+5. Объявление и определение записи в Pascal
+type complex = record re, im: real; end;
 
 ## Пример верных строк 
-## primer 1  let complex_num2 = num::complex::Complex::new(3.1, -4.2);
-<img width="759" height="455" alt="image" src="https://github.com/user-attachments/assets/1eabf992-45ec-42c2-9427-fbd29951f288" />
+## primer 1  type complex = record re, im: real; end;
+сюда картинку
 
-## primer 2 let x = Complex::new(1, 2);
-<img width="819" height="445" alt="image" src="https://github.com/user-attachments/assets/854c0d84-5a3e-4d83-8eda-94bc063bb911" />
 
-## primer 3 let z = std::math::Complex::new(0.0, -1.5);
-<img width="1108" height="630" alt="image" src="https://github.com/user-attachments/assets/e961b46a-049a-47b3-baa2-c7be42efefad" />
+## primer 2 
 
+## primer 3 
 
 ## разработка грамматики:
 
 ```
-type_declaration ::= 'type' identifier '=' record_type ';'
-record_type      ::= 'record' field_list 'end' ';'
-field_list       ::= field_declaration (';' field_declaration)* [';']
-field_declaration::= identifier_list ':' type_name
-identifier_list  ::= identifier (',' identifier)*
-type_name        ::= 'integer' | 'real' | 'char' | 'boolean' | 'string' | identifier
-
-V_N = <START>, <LET>, <ID>, <EQUAL>, <OPEN>, <NUM1>, <INT1>, <FLOAT>, <FLOAT1>, <NUM2>, <OPEN1>,  <END>
-V_T = { a....z, A....Z, 0....9, = , (, ), ,, ., -, ;}
-letter = A | B | C | ... | Z | a | b | c | ... | z
-digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+Z → "type" ID "=" "record" FIELD_LIST "end" ";"
+FIELD_LIST → ( FIELD_DEF ";" )* FIELD_DEF
+FIELD_DEF → ID_LIST ":" TYPE_NAME
+ID_LIST → ID ( "," ID )*
+TYPE_NAME → "real" | "integer"
 
 ```
-Грамматика G[Z] для объявления комплексного числа на языке Rust является автоматной (тип 3) и относится к подклассу праволинейных автоматных грамматик. Это означает, что для неё существует детерминированный конечный автомат, который может быть эффективно реализован в виде программы-распознавателя.
+Грамматика G[Z] для объявления записи в языке Pascal является контекстно-свободной (тип 2 по Хомскому) и относится к подклассу однозначных грамматик. Это означает, что для каждого предложения языка существует единственное дерево разбора, а синтаксический анализатор может быть реализован методом рекурсивного спуска без неоднозначностей.
 
 
 # Схема автоматов 
