@@ -64,20 +64,14 @@ TYPE_NAME → "real" | "integer" | "string"
 
 
 # test 2
-
+![alt text]({2B40DB2D-DFC9-4972-A9ED-0DFFF5F29ECE}.png)
 
 
 # test 3
-
+![alt text]({1D907B99-950F-44A6-A92D-570F1464D8BF}.png)
 
 # test 4
-
+![alt text]({64400257-C62E-477E-9C2C-ABC9A2D7F9B3}.png)
 
 # test 5
-
-
-# test 6
-
-
-# test 7 
-
+![alt text]({0F7312C7-DDAC-4F6E-A8ED-27BFE43DBD09}.png)
