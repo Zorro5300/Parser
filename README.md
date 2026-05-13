@@ -60,7 +60,7 @@ TYPE_NAME → "real" | "integer" | "string"
 
 # Тестовые примеры (скриншоты интерфейса программы, примеры анализа конкретных строк в программе).
 # test 1 
-<img width="819" height="336" alt="image" src="https://github.com/user-attachments/assets/7e3bac1c-3f59-48cd-8c61-7fa17b6abbec" />
+c:\Users\Admin\AppData\Local\Packages\MicrosoftWindows.Client.Core_cw5n1h2txyewy\TempState\ScreenClip\{5E2263C0-400E-4569-AA45-0C5337F92FDC}.png
 
 
 # test 2
