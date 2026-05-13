@@ -38,7 +38,7 @@ TYPE_NAME → "real" | "integer"
 
 
 # Схема автоматов 
-<img width="782" height="1107" alt="grammatic drawio" src="https://github.com/user-attachments/assets/a17c906c-f57a-4070-ac22-7525c05ad74a" />
+![alt text](автоматы.png)
 
 
 # Классификация грамматики (по Хомскому).
