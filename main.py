@@ -227,30 +227,7 @@ project/
             
             "✅ Корректный пример (одно поле)": 
                 "type point = record\n    x,y,z: real;\nend;",
-            
-            "❌ Ошибка: нет 'type'": 
-                "complex = record\n    re,im: real;\nend;",
-            
-            "❌ Ошибка: нет '='": 
-                "type complex record\n    re,im: real;\nend;",
-            
-            "❌ Ошибка: нет 'record'": 
-                "type complex =\n    re,im: real;\nend;",
-            
-            "❌ Ошибка: нет 'end'": 
-                "type complex = record\n    re,im: real;",
-            
-            "❌ Ошибка: нет ';' в конце": 
-                "type complex = record\n    re,im: real;\nend",
-            
-            "❌ Ошибка: неправильный тип": 
-                "type complex = record\n    re,im: string;\nend;",
-            
-            "❌ Ошибка: нет ':'": 
-                "type complex = record\n    re,im real;\nend;",
-            
-            "❌ Ошибка: нет идентификатора": 
-                "type = record\n    re,im: real;\nend;",
+
         }
         
         self.init_ui()

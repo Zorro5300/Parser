@@ -7,42 +7,37 @@
 class Token:
     """Класс для хранения информации о лексеме"""
     def __init__(self, code, token_type, lexeme, line, start_pos, end_pos):
-        self.code = code          # Условный код
-        self.token_type = token_type  # Тип лексемы
-        self.lexeme = lexeme      # Лексема
-        self.line = line          # Номер строки
-        self.start_pos = start_pos    # Начальная позиция в строке
-        self.end_pos = end_pos        # Конечная позиция в строке
-        self.is_error = False     # Флаг ошибки
+        self.code = code
+        self.token_type = token_type
+        self.lexeme = lexeme
+        self.line = line
+        self.start_pos = start_pos
+        self.end_pos = end_pos
+        self.is_error = False
 
 
 class LexicalAnalyzer:
     """Лексический анализатор (сканер) для Pascal-подобного синтаксиса"""
     
-    # Словарь кодов лексем
     TOKEN_CODES = {
-        'KEYWORD_TYPE': 1,         # Ключевое слово type
-        'KEYWORD_RECORD': 2,       # Ключевое слово record
-        'KEYWORD_END': 3,          # Ключевое слово end
-        'IDENTIFIER': 4,           # Идентификатор
-        'COLON': 5,                # Двоеточие :
-        'SEMICOLON': 6,            # Точка с запятой ;
-        'COMMA': 7,                # Запятая ,
-        'KEYWORD_REAL': 8,         # Тип данных real
-        'KEYWORD_INTEGER': 9,      # Тип данных integer
+        'KEYWORD_TYPE': 1,
+        'KEYWORD_RECORD': 2,
+        'KEYWORD_END': 3,
+        'IDENTIFIER': 4,
+        'COLON': 5,
+        'SEMICOLON': 6,
+        'COMMA': 7,
+        'KEYWORD_REAL': 8,
+        'KEYWORD_INTEGER': 9,
         'KEYWORD_STRING': 10,
-        'ASSIGN': 11,              # Оператор присваивания :=
-        'WHITESPACE': 12,          # Разделитель (пробел)
-        'NEWLINE': 13,             # Разделитель (новая строка)
-        'ERROR': 99                # Ошибка
+        'ASSIGN': 11,
+        'WHITESPACE': 12,
+        'NEWLINE': 13,
+        'ERROR': 99
     }
     
-    # Ключевые слова Pascal
     KEYWORDS = {
-        'type', 'record', 'end', 'real', 'integer', 
-        'var', 'begin', 'procedure', 'function', 'if', 
-        'then', 'else', 'while', 'do', 'for', 'to', 
-        'downto', 'array', 'of', 'string', 'boolean'
+        'type', 'record', 'end', 'real', 'integer', 'string'
     }
     
     def __init__(self):
@@ -50,27 +45,15 @@ class LexicalAnalyzer:
         self.errors = []
     
     def is_letter(self, char):
-        """Проверка: буква или подчеркивание"""
-        return char.isalpha() or char == '_'
+        return ('a' <= char <= 'z') or ('A' <= char <= 'Z') or char == '_'
     
     def is_digit(self, char):
-        """Проверка: цифра"""
-        return char.isdigit()
+        return '0' <= char <= '9'
     
     def is_alphanumeric(self, char):
-        """Проверка: буква, цифра или подчеркивание"""
         return self.is_letter(char) or self.is_digit(char)
     
     def analyze(self, text):
-        """
-        Анализ входного текста и выделение лексем.
-        
-        Аргументы:
-            text: строка с исходным кодом
-            
-        Возвращает:
-            кортеж (tokens, errors)
-        """
         self.tokens = []
         self.errors = []
         
@@ -85,32 +68,25 @@ class LexicalAnalyzer:
                 char = line[col]
                 
                 # Пропуск пробелов
-                if char in ' \t':
+                if char == ' ' or char == '\t':
                     whitespace_start = col
-                    while col < len(line) and line[col] in ' \t':
+                    while col < len(line) and (line[col] == ' ' or line[col] == '\t'):
                         col += 1
-                    lexeme = line[whitespace_start:col]
                     self.tokens.append(Token(
                         self.TOKEN_CODES['WHITESPACE'],
                         'разделитель (пробел)',
-                        lexeme,
+                        ' ',
                         line_num,
                         whitespace_start + 1,
                         col
                     ))
                     continue
-
-                # Проверка на русские символы (кириллицу)
-                if 'а' <= char <= 'я' or 'А' <= char <= 'Я' or char == 'ё' or char == 'Ё':
-                    self._add_error(line_num, col + 1, char)
-                    col += 1
-                    continue
-
+                
                 # Оператор =
                 if char == '=':
                     self.tokens.append(Token(
                         self.TOKEN_CODES['ASSIGN'],
-                        'Оператор присваивания',
+                        'оператор присваивания',
                         '=',
                         line_num,
                         col + 1,
@@ -126,7 +102,6 @@ class LexicalAnalyzer:
                         col += 1
                     lexeme = line[start:col]
                     
-                    # Определение типа лексемы
                     if lexeme == 'type':
                         token_code = self.TOKEN_CODES['KEYWORD_TYPE']
                         token_type = 'ключевое слово (type)'
@@ -159,10 +134,9 @@ class LexicalAnalyzer:
                     ))
                     continue
                 
-                # Двоеточие (может быть частью :=)
+                # Двоеточие
                 if char == ':':
                     if col + 1 < len(line) and line[col + 1] == '=':
-                        # Оператор присваивания :=
                         self.tokens.append(Token(
                             self.TOKEN_CODES['ASSIGN'],
                             'оператор присваивания',
@@ -173,7 +147,6 @@ class LexicalAnalyzer:
                         ))
                         col += 2
                     else:
-                        # Обычное двоеточие
                         self.tokens.append(Token(
                             self.TOKEN_CODES['COLON'],
                             'разделитель (двоеточие)',
@@ -211,11 +184,11 @@ class LexicalAnalyzer:
                     col += 1
                     continue
                 
-                # Недопустимый символ
+                # Русские символы и другие недопустимые - просто пропускаем с ошибкой
                 self._add_error(line_num, col + 1, char)
                 col += 1
             
-            # Добавляем маркер конца строки
+            # Маркер конца строки
             if line_num < len(lines):
                 self.tokens.append(Token(
                     self.TOKEN_CODES['NEWLINE'],
@@ -229,17 +202,7 @@ class LexicalAnalyzer:
         return self.tokens, self.errors
     
     def _add_error(self, line, pos, char):
-        """Добавление информации об ошибке"""
-        error_token = Token(
-            self.TOKEN_CODES['ERROR'],
-            'ОШИБКА',
-            char,
-            line,
-            pos,
-            pos
-        )
-        error_token.is_error = True
-        self.tokens.append(error_token)
+        # Добавляем ошибку в список, НО НЕ создаем токен!
         self.errors.append({
             'line': line,
             'position': pos,

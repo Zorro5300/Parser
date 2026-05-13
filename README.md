@@ -60,24 +60,24 @@ TYPE_NAME → "real" | "integer" | "string"
 
 # Тестовые примеры (скриншоты интерфейса программы, примеры анализа конкретных строк в программе).
 # test 1 
-c:\Users\Admin\AppData\Local\Packages\MicrosoftWindows.Client.Core_cw5n1h2txyewy\TempState\ScreenClip\{5E2263C0-400E-4569-AA45-0C5337F92FDC}.png
+![alt text]({5E2263C0-400E-4569-AA45-0C5337F92FDC}.png)
 
 
 # test 2
-<img width="773" height="306" alt="image" src="https://github.com/user-attachments/assets/73495f47-9c22-47c2-b016-f480a54e2192" />
+
 
 
 # test 3
-<img width="759" height="348" alt="image" src="https://github.com/user-attachments/assets/5568a367-e445-432d-b10a-b6706cedccd4" />
+
 
 # test 4
-<img width="731" height="439" alt="image" src="https://github.com/user-attachments/assets/9bf20967-69dc-482d-8a37-56fa3be3bda7" />
+
 
 # test 5
-<img width="793" height="324" alt="image" src="https://github.com/user-attachments/assets/ce5706b6-90b6-4d36-a116-71e4a701d5ef" />
 
-#test 6
-<img width="698" height="300" alt="image" src="https://github.com/user-attachments/assets/d74dacb6-4011-4698-9f1a-59fcee2e9015" />
 
-#test 7 
-<img width="482" height="248" alt="image" src="https://github.com/user-attachments/assets/296e69e9-eeb1-404d-a1a1-83188fa35e24" />
+# test 6
+
+
+# test 7 
+

@@ -133,7 +133,6 @@ class SyntaxAnalyzer:
                 token.lexeme, token.line, token.start_pos,
                 f"Ожидалось ключевое слово 'record', получено '{token.lexeme}'"
             )
-            self._next()
         else:
             self._next()
         # 7    
@@ -176,7 +175,7 @@ class SyntaxAnalyzer:
                 self._add_error(
                     token.lexeme, token.line, token.start_pos,
                     f"Неожиданный токен '{token.lexeme}' после конца объявления"
-                    )
+                )
 
     def _skip_to_end(self):
         """Пропустить все токены до end"""
