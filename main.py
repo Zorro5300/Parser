@@ -800,10 +800,20 @@ project/
                     
                     description_item = QTableWidgetItem(error.description)
                     
-                    error_color = QColor(255, 220, 220)
+                    error_color = QColor(255, 200, 200)
                     fragment_item.setBackground(QBrush(error_color))
                     location_item.setBackground(QBrush(error_color))
                     description_item.setBackground(QBrush(error_color))
+                    # Черный текст
+                    fragment_item.setForeground(QBrush(QColor(0, 0, 0)))
+                    location_item.setForeground(QBrush(QColor(0, 0, 0)))
+                    description_item.setForeground(QBrush(QColor(0, 0, 0)))
+                    # Жирный шрифт
+                    font = QFont()
+                    font.setBold(True)
+                    fragment_item.setFont(font)
+                    location_item.setFont(font)
+                    description_item.setFont(font)
                     
                     self.error_table.setItem(i, 0, fragment_item)
                     self.error_table.setItem(i, 1, location_item)
@@ -824,6 +834,7 @@ project/
                 ok_font.setBold(True)
                 ok_item.setFont(ok_font)
                 ok_item.setBackground(QBrush(QColor(200, 255, 200)))
+                ok_item.setForeground(QBrush(QColor(0, 0, 0)))  # Черный текст
                 self.error_table.setItem(0, 0, ok_item)
                 self.error_table.setSpan(0, 0, 1, 3)
                 
