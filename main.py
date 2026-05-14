@@ -93,6 +93,7 @@ class TextEditor(QMainWindow):
         self.syntax_analyzer = SyntaxAnalyzer()
         self.current_tokens = []
         self.current_errors = []
+        self.all_errors = []  # Список для всех ошибок (лексических и синтаксических)
         
         self.text_menu_info = {
             "Постановка задачи": "<h3>📋 Постановка задачи</h3><hr><p>Вариант 13: Объявление и определение записи (record) в Pascal</p><pre>type complex = record\n    re,im: real;\nend;</pre>",
@@ -434,6 +435,8 @@ class TextEditor(QMainWindow):
         self.error_table.setRowCount(0)
         self.current_tokens = []
         self.current_errors = []
+        self.all_errors = []
+        self.error_table.update()
     
     def show_text_menu_info(self, title):
         info_html = self.text_menu_info.get(title, f"<h3>{title}</h3><p>Информация будет добавлена позже.</p>")
@@ -559,7 +562,7 @@ class TextEditor(QMainWindow):
                 self.output_area.append("Лексический анализ завершен без ошибок")
                 self.output_area.append(f"Выделено значащих лексем: {len(significant_tokens)}")
             
-            # Синтаксический анализ (ВСЕГДА выполняется)
+            # Синтаксический анализ
             self.output_area.append("\n" + "-"*60)
             self.output_area.append("ЭТАП 2: СИНТАКСИЧЕСКИЙ АНАЛИЗ")
             self.output_area.append("-"*60)
@@ -567,21 +570,23 @@ class TextEditor(QMainWindow):
             success, syntax_errors = self.syntax_analyzer.analyze(text)
             self.current_errors = syntax_errors
             
-            # Собираем ВСЕ ошибки (лексические + синтаксические)
-            all_errors = []
+            # СОХРАНЯЕМ ВСЕ ОШИБКИ (лексические + синтаксические) для навигации
+            self.all_errors = []
             
-            # Лексические ошибки
+            # Добавляем лексические ошибки
             for err in lexical_errors:
-                all_errors.append({
+                self.all_errors.append({
+                    'type': 'lexical',
                     'fragment': err['char'],
                     'line': err['line'],
                     'position': err['position'],
                     'description': err['message']
                 })
             
-            # Синтаксические ошибки
+            # Добавляем синтаксические ошибки
             for err in syntax_errors:
-                all_errors.append({
+                self.all_errors.append({
+                    'type': 'syntax',
                     'fragment': err.fragment if err.fragment else "(пусто)",
                     'line': err.line,
                     'position': err.position,
@@ -589,9 +594,9 @@ class TextEditor(QMainWindow):
                 })
             
             # Отображаем ВСЕ ошибки в таблице
-            if all_errors:
-                self.error_table.setRowCount(len(all_errors))
-                for i, err in enumerate(all_errors):
+            if self.all_errors:
+                self.error_table.setRowCount(len(self.all_errors))
+                for i, err in enumerate(self.all_errors):
                     fragment_item = QTableWidgetItem(err['fragment'])
                     location_item = QTableWidgetItem(f"строка {err['line']}, позиция {err['position']}")
                     description_item = QTableWidgetItem(err['description'])
@@ -609,8 +614,8 @@ class TextEditor(QMainWindow):
                     self.error_table.setItem(i, 1, location_item)
                     self.error_table.setItem(i, 2, description_item)
                 
-                self.output_area.append(f"\nВсего ошибок: {len(all_errors)} (лексических: {len(lexical_errors)}, синтаксических: {len(syntax_errors)})")
-                self.statusbar.showMessage(f"Анализ завершен: {len(all_errors)} ошибок")
+                self.output_area.append(f"\nВсего ошибок: {len(self.all_errors)} (лексических: {len(lexical_errors)}, синтаксических: {len(syntax_errors)})")
+                self.statusbar.showMessage(f"Анализ завершен: {len(self.all_errors)} ошибок")
                 self.tab_widget.setCurrentIndex(1)
             else:
                 self.error_table.setRowCount(1)
@@ -638,10 +643,11 @@ class TextEditor(QMainWindow):
             self._navigate_to_position(token.line, token.start_pos, token.end_pos)
     
     def on_error_table_clicked(self, row, column):
-        # Навигация только для синтаксических ошибок (лексические не хранятся в current_errors)
-        if 0 <= row < len(self.current_errors):
-            error = self.current_errors[row]
-            self._navigate_to_position(error.line, error.position, error.position)
+        """Навигация по ошибкам (лексическим и синтаксическим)"""
+        if hasattr(self, 'all_errors') and 0 <= row < len(self.all_errors):
+            error = self.all_errors[row]
+            # Для лексических и синтаксических ошибок используем line и position
+            self._navigate_to_position(error['line'], error['position'], error['position'])
     
     def _navigate_to_position(self, line, start_pos, end_pos):
         cursor = self.editor.textCursor()
