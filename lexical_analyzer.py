@@ -26,6 +26,7 @@ class LexicalAnalyzer:
     KEYWORD_INTEGER = 5
     KEYWORD_BOOLEAN = 6
     KEYWORD_CHAR = 7
+    KEYWORD_STRING = 8
     IDENTIFIER = 10
     ASSIGN_OP = 11  # =
     COLON = 12      # :
@@ -45,6 +46,7 @@ class LexicalAnalyzer:
         KEYWORD_INTEGER: "ключевое слово 'integer'",
         KEYWORD_BOOLEAN: "ключевое слово 'boolean'",
         KEYWORD_CHAR: "ключевое слово 'char'",
+        KEYWORD_STRING: "ключевое слово 'string'",
         IDENTIFIER: "идентификатор",
         ASSIGN_OP: "оператор присваивания '='",
         COLON: "двоеточие ':'",
@@ -64,7 +66,8 @@ class LexicalAnalyzer:
         'real': KEYWORD_REAL,
         'integer': KEYWORD_INTEGER,
         'boolean': KEYWORD_BOOLEAN,
-        'char': KEYWORD_CHAR
+        'char': KEYWORD_CHAR,
+        'string': KEYWORD_STRING
     }
     
     def __init__(self):
